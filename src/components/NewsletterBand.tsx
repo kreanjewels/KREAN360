@@ -74,13 +74,13 @@ export const NewsletterBand: React.FC = () => {
           <div className="flex items-center gap-2">
             <span className="text-[10px] uppercase tracking-widest text-[#635e53]">Concierge Desk:</span>
             <a 
-              href="https://wa.me/18008455732" 
+              href="https://wa.me/13364885522" 
               target="_blank" 
               rel="noreferrer"
               className="hover:text-[#c9a86a] flex items-center gap-1 transition-colors"
             >
               <MessageCircle className="w-3.5 h-3.5 text-[#25D366]" />
-              <span>WhatsApp Atelier (+1 800 845-KREAN)</span>
+              <span>WhatsApp Atelier (+1 336 488-5522)</span>
             </a>
           </div>
 

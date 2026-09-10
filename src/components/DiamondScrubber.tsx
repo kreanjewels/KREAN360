@@ -2,13 +2,90 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { RotateCw, Sparkles, Compass, ShieldCheck } from 'lucide-react';
 
 const TOTAL_FRAMES = 100;
+const CACHE_NAME = 'krean-diamond-sequence-v1';
+
+// Persistent module-level in-memory cache to prevent re-fetching and GC churn across renders/scrolls
+const diamondMemoryCache: (HTMLImageElement | null)[] = new Array(TOTAL_FRAMES).fill(null);
+
+// Helper to fetch or read from browser Cache API, decode, and store into memory cache
+async function getCachedOrFetchFrame(
+  frameIndex: number,
+  cache: Cache | null
+): Promise<HTMLImageElement> {
+  // 1. Check memory cache first (instant 0ms)
+  const existing = diamondMemoryCache[frameIndex];
+  if (existing && existing.complete && existing.naturalWidth > 0) {
+    return existing;
+  }
+
+  const frameNum = String(frameIndex).padStart(3, '0');
+  const url = `/diamond-sequence/frame_${frameNum}.webp`;
+  const img = new Image();
+
+  try {
+    let blobUrl: string | null = null;
+
+    // 2. Check Browser Cache API (persistent storage across page reloads/sessions)
+    if (cache) {
+      try {
+        const cachedResponse = await cache.match(url);
+        if (cachedResponse && cachedResponse.ok) {
+          const blob = await cachedResponse.blob();
+          blobUrl = URL.createObjectURL(blob);
+        } else {
+          // Fetch from network and store a clone in Cache API
+          const networkResponse = await fetch(url);
+          if (networkResponse.ok) {
+            cache.put(url, networkResponse.clone()).catch(() => {});
+            const blob = await networkResponse.blob();
+            blobUrl = URL.createObjectURL(blob);
+          }
+        }
+      } catch {
+        blobUrl = null;
+      }
+    }
+
+    img.src = blobUrl || url;
+
+    // 3. Pre-decode image into GPU raster memory to eliminate jank & flicker on rapid scroll
+    try {
+      if (typeof img.decode === 'function') {
+        await img.decode();
+      } else {
+        await new Promise<void>((resolve) => {
+          const el = img as HTMLImageElement;
+          if (el.complete) return resolve();
+          el.onload = () => resolve();
+          el.onerror = () => resolve();
+        });
+      }
+    } catch {
+      // Decode errors or unsupported environments ignore safely
+    }
+
+    diamondMemoryCache[frameIndex] = img;
+    return img;
+  } catch {
+    // Graceful fallback
+    img.src = url;
+    diamondMemoryCache[frameIndex] = img;
+    return img;
+  }
+}
 
 export const DiamondScrubber: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const imagesRef = useRef<(HTMLImageElement | null)[]>(new Array(TOTAL_FRAMES).fill(null));
+  const imagesRef = useRef<(HTMLImageElement | null)[]>(diamondMemoryCache);
   
-  const [loadedCount, setLoadedCount] = useState(0);
+  // Calculate initial count from memory cache if already populated
+  const initialLoadedCount = diamondMemoryCache.filter(
+    (img) => img && img.complete && img.naturalWidth > 0
+  ).length;
+
+  const [loadedCount, setLoadedCount] = useState(initialLoadedCount);
+  const [hasFadedOut, setHasFadedOut] = useState(initialLoadedCount >= TOTAL_FRAMES);
   const [displayDegrees, setDisplayDegrees] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isAutoSpinning, setIsAutoSpinning] = useState(false);
@@ -23,40 +100,115 @@ export const DiamondScrubber: React.FC = () => {
   const dragStartXRef = useRef<number>(0);
   const dragStartFrameRef = useRef<number>(0);
   const lastTimeRef = useRef<number>(0);
+  const drawFrameRef = useRef<(frameIdx: number) => void>(() => {});
+
+  // Fade out loader smoothly once all 100 frames are cached
+  useEffect(() => {
+    if (loadedCount >= TOTAL_FRAMES) {
+      const timer = setTimeout(() => {
+        setHasFadedOut(true);
+      }, 1200);
+      return () => clearTimeout(timer);
+    }
+  }, [loadedCount]);
 
   // Sync state refs for animation loop
   isAutoSpinningRef.current = isAutoSpinning;
   isDraggingRef.current = isDragging;
 
-  // 1. Preload 100 WebP frames with immediate availability cache
+  // 1. Dual-Tier Preload (Memory Cache + Browser Cache API) with Immediate Frame 0 Render
   useEffect(() => {
     let isMounted = true;
-    let count = 0;
 
-    for (let i = 0; i < TOTAL_FRAMES; i++) {
-      const img = new Image();
-      const frameNum = String(i).padStart(3, '0');
-      img.src = `/diamond-sequence/frame_${frameNum}.webp`;
+    const initSequenceCache = async () => {
+      // If memory cache is already 100% warm, apply immediately
+      const warmCount = diamondMemoryCache.filter(
+        (img) => img && img.complete && img.naturalWidth > 0
+      ).length;
 
-      img.onload = () => {
-        if (!isMounted) return;
-        imagesRef.current[i] = img;
-        count++;
-        setLoadedCount(count);
+      if (warmCount >= TOTAL_FRAMES) {
+        imagesRef.current = [...diamondMemoryCache];
+        setLoadedCount(TOTAL_FRAMES);
+        setHasFadedOut(true);
+        drawFrameRef.current(0);
+        return;
+      }
+
+      // Open Browser Cache API
+      let cache: Cache | null = null;
+      if (typeof window !== 'undefined' && 'caches' in window) {
+        try {
+          cache = await caches.open(CACHE_NAME);
+        } catch {
+          cache = null;
+        }
+      }
+
+      if (!isMounted) return;
+
+      // Priority 1: Instant load of Frame 0 to paint canvas immediately
+      const frame0 = await getCachedOrFetchFrame(0, cache);
+      if (isMounted) {
+        imagesRef.current[0] = frame0;
+        setLoadedCount((prev) => Math.max(prev, 1));
+        drawFrameRef.current(0);
+      }
+
+      // Priority 2: Stream remaining 99 frames via concurrent pool (concurrency: 6)
+      const remainingIndices: number[] = [];
+      for (let i = 1; i < TOTAL_FRAMES; i++) {
+        if (!diamondMemoryCache[i] || !diamondMemoryCache[i]?.complete) {
+          remainingIndices.push(i);
+        } else {
+          imagesRef.current[i] = diamondMemoryCache[i];
+        }
+      }
+
+      let completedCount = TOTAL_FRAMES - remainingIndices.length;
+      if (isMounted) {
+        setLoadedCount(completedCount);
+      }
+
+      const CONCURRENCY = 6;
+      const poolWorker = async () => {
+        while (remainingIndices.length > 0 && isMounted) {
+          const idx = remainingIndices.shift();
+          if (idx === undefined) break;
+
+          try {
+            const loadedImg = await getCachedOrFetchFrame(idx, cache);
+            if (isMounted) {
+              imagesRef.current[idx] = loadedImg;
+              completedCount++;
+              setLoadedCount(completedCount);
+            }
+          } catch {
+            if (isMounted) {
+              completedCount++;
+              setLoadedCount(completedCount);
+            }
+          }
+        }
       };
-      img.onerror = () => {
-        if (!isMounted) return;
-        count++;
-        setLoadedCount(count);
-      };
-    }
+
+      const workers = Array.from({ length: Math.min(CONCURRENCY, remainingIndices.length || 1) }, () =>
+        poolWorker()
+      );
+      await Promise.all(workers);
+
+      if (isMounted) {
+        setLoadedCount(TOTAL_FRAMES);
+      }
+    };
+
+    initSequenceCache();
 
     return () => {
       isMounted = false;
     };
   }, []);
 
-  // 2. High-performance canvas drawing helper
+  // 2. High-performance canvas drawing helper with memory cache fallback
   const drawFrameToCanvas = useCallback((frameIdx: number) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -68,18 +220,20 @@ export const DiamondScrubber: React.FC = () => {
     if (safeIdx < 0) safeIdx += TOTAL_FRAMES;
 
     // Find nearest loaded image if current isn't ready
-    let img = imagesRef.current[safeIdx];
+    let img = imagesRef.current[safeIdx] || diamondMemoryCache[safeIdx];
     if (!img || !img.complete || img.naturalWidth === 0) {
-      // Fallback search to closest loaded frame
-      for (let offset = 1; offset < 10; offset++) {
+      // Fallback search to closest loaded frame in memory
+      for (let offset = 1; offset < 15; offset++) {
         const prev = (safeIdx - offset + TOTAL_FRAMES) % TOTAL_FRAMES;
         const next = (safeIdx + offset) % TOTAL_FRAMES;
-        if (imagesRef.current[prev]?.complete && imagesRef.current[prev]?.naturalWidth) {
-          img = imagesRef.current[prev];
+        const prevImg = imagesRef.current[prev] || diamondMemoryCache[prev];
+        if (prevImg?.complete && prevImg?.naturalWidth) {
+          img = prevImg;
           break;
         }
-        if (imagesRef.current[next]?.complete && imagesRef.current[next]?.naturalWidth) {
-          img = imagesRef.current[next];
+        const nextImg = imagesRef.current[next] || diamondMemoryCache[next];
+        if (nextImg?.complete && nextImg?.naturalWidth) {
+          img = nextImg;
           break;
         }
       }
@@ -104,6 +258,8 @@ export const DiamondScrubber: React.FC = () => {
 
     ctx.drawImage(img, x, y, w, h);
   }, []);
+
+  drawFrameRef.current = drawFrameToCanvas;
 
   // 3. Canvas Resizing (ONLY on mount or window resize, NEVER on frame update)
   useEffect(() => {
@@ -282,16 +438,9 @@ export const DiamondScrubber: React.FC = () => {
         {/* Center: Interactive Rotating Diamond Canvas */}
         <div className="relative z-10 my-auto flex flex-col items-center justify-center">
           
-          {/* Preload status if still caching */}
-          {loadedCount < TOTAL_FRAMES && (
-            <div className="absolute top-0 text-[10px] tracking-[0.2em] text-[#c9a86a]/70 uppercase animate-pulse">
-              Caching High-Def Facets: {loadedCount}%
-            </div>
-          )}
-
           {/* Canvas Wrapper with tactile touch-action none */}
           <div
-            className="relative cursor-grab active:cursor-grabbing group touch-none select-none"
+            className="relative cursor-grab active:cursor-grabbing group touch-none select-none flex items-center justify-center"
             onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
@@ -299,6 +448,191 @@ export const DiamondScrubber: React.FC = () => {
           >
             {/* Glowing ring behind diamond */}
             <div className="absolute inset-0 rounded-full bg-radial-[circle,_rgba(201,168,106,0.08)_0%,_transparent_70%] scale-110 pointer-events-none" />
+
+            {/* Subtle, Elegant Loading Skeleton & Circular Progress Indicator */}
+            {!hasFadedOut && (
+              <div
+                className={`absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-20 transition-opacity duration-1000 ${
+                  loadedCount >= TOTAL_FRAMES ? 'opacity-0' : 'opacity-100'
+                }`}
+              >
+                {/* SVG Skeleton Wireframe + Circular Progress Arc */}
+                <div className="relative w-72 h-72 sm:w-80 sm:h-80 md:w-96 md:h-96 max-w-full aspect-square flex items-center justify-center">
+                  
+                  {/* Subtle golden ambient glow pulse during initial loading */}
+                  <div className="absolute inset-4 rounded-full bg-radial-[circle_at_center,_rgba(201,168,106,0.06)_0%,_transparent_65%] animate-pulse" />
+
+                  <svg viewBox="0 0 240 240" className="w-full h-full drop-shadow-[0_0_15px_rgba(201,168,106,0.15)]">
+                    <defs>
+                      <linearGradient id="scrubberGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#f5e6c8" />
+                        <stop offset="50%" stopColor="#c9a86a" />
+                        <stop offset="100%" stopColor="#876b38" />
+                      </linearGradient>
+                      <linearGradient id="shimmerFacetGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="#c9a86a" stopOpacity="0.04" />
+                        <stop offset="50%" stopColor="#c9a86a" stopOpacity="0.22" />
+                        <stop offset="100%" stopColor="#c9a86a" stopOpacity="0.04" />
+                      </linearGradient>
+                    </defs>
+
+                    {/* Outer Bezel Ticks (12 Fine Markers like a luxury chronograph) */}
+                    {Array.from({ length: 12 }).map((_, idx) => {
+                      const angle = (idx * 30) * (Math.PI / 180);
+                      const r1 = 104;
+                      const r2 = 108;
+                      const x1 = 120 + r1 * Math.cos(angle);
+                      const y1 = 120 + r1 * Math.sin(angle);
+                      const x2 = 120 + r2 * Math.cos(angle);
+                      const y2 = 120 + r2 * Math.sin(angle);
+                      return (
+                        <line
+                          key={idx}
+                          x1={x1}
+                          y1={y1}
+                          x2={x2}
+                          y2={y2}
+                          stroke="#c9a86a"
+                          strokeOpacity="0.3"
+                          strokeWidth="1"
+                        />
+                      );
+                    })}
+
+                    {/* Circular Track */}
+                    <circle
+                      cx="120"
+                      cy="120"
+                      r="106"
+                      fill="none"
+                      stroke="#1a1712"
+                      strokeWidth="1.5"
+                    />
+
+                    {/* Animated Golden Progress Arc */}
+                    <circle
+                      cx="120"
+                      cy="120"
+                      r="106"
+                      fill="none"
+                      stroke="url(#scrubberGoldGrad)"
+                      strokeWidth="2"
+                      strokeDasharray={2 * Math.PI * 106}
+                      strokeDashoffset={2 * Math.PI * 106 * (1 - Math.max(loadedCount, 1) / TOTAL_FRAMES)}
+                      strokeLinecap="round"
+                      className="transition-all duration-300 ease-out -rotate-90 origin-center"
+                    />
+
+                    {/* Diamond Wireframe Skeleton (visible while initial frames load, dissolves once frames take over) */}
+                    <g
+                      className={`transition-opacity duration-700 ${
+                        loadedCount >= 8 ? 'opacity-0' : 'opacity-100'
+                      }`}
+                    >
+                      {/* Table facet */}
+                      <polygon
+                        points="84,86 156,86 182,112 58,112"
+                        fill="url(#shimmerFacetGrad)"
+                        stroke="#c9a86a"
+                        strokeWidth="0.8"
+                        strokeOpacity="0.55"
+                      />
+                      {/* Crown facet triangles */}
+                      <polygon
+                        points="84,86 120,112 156,86"
+                        fill="none"
+                        stroke="#c9a86a"
+                        strokeWidth="0.8"
+                        strokeOpacity="0.4"
+                      />
+                      <polygon
+                        points="58,112 84,86 92,112"
+                        fill="none"
+                        stroke="#c9a86a"
+                        strokeWidth="0.8"
+                        strokeOpacity="0.35"
+                      />
+                      <polygon
+                        points="182,112 156,86 148,112"
+                        fill="none"
+                        stroke="#c9a86a"
+                        strokeWidth="0.8"
+                        strokeOpacity="0.35"
+                      />
+
+                      {/* Girdle Line */}
+                      <line
+                        x1="58"
+                        y1="112"
+                        x2="182"
+                        y2="112"
+                        stroke="#c9a86a"
+                        strokeWidth="1.2"
+                        strokeOpacity="0.75"
+                      />
+
+                      {/* Pavilion facets converging to Culet at (120, 178) */}
+                      <polygon
+                        points="58,112 120,178 92,112"
+                        fill="none"
+                        stroke="#c9a86a"
+                        strokeWidth="0.8"
+                        strokeOpacity="0.4"
+                      />
+                      <polygon
+                        points="92,112 120,178 120,112"
+                        fill="none"
+                        stroke="#c9a86a"
+                        strokeWidth="0.8"
+                        strokeOpacity="0.5"
+                      />
+                      <polygon
+                        points="120,112 120,178 148,112"
+                        fill="none"
+                        stroke="#c9a86a"
+                        strokeWidth="0.8"
+                        strokeOpacity="0.5"
+                      />
+                      <polygon
+                        points="148,112 120,178 182,112"
+                        fill="none"
+                        stroke="#c9a86a"
+                        strokeWidth="0.8"
+                        strokeOpacity="0.4"
+                      />
+
+                      {/* Culet point */}
+                      <circle cx="120" cy="178" r="1.5" fill="#c9a86a" opacity="0.9" />
+                    </g>
+                  </svg>
+
+                  {/* Centered micro-readout when wireframe is visible */}
+                  {loadedCount < 8 && (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none mt-20">
+                      <span className="text-[10px] uppercase tracking-[0.25em] text-[#c9a86a] font-mono">
+                        {Math.round((loadedCount / TOTAL_FRAMES) * 100)}%
+                      </span>
+                      <span className="text-[8px] uppercase tracking-[0.2em] text-[#8e8a80] mt-0.5">
+                        Calibrating
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Floating Indicator Capsule at Bottom of Ring */}
+                  <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap">
+                    <div className="flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#0a0a0a]/90 backdrop-blur-md border border-[#262016] shadow-2xl">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#c9a86a] animate-pulse" />
+                      <span className="text-[9px] uppercase tracking-[0.22em] text-[#c9a86a] font-mono">
+                        {loadedCount < TOTAL_FRAMES
+                          ? `Buffering 360° Sequence • ${loadedCount}%`
+                          : '100% Calibrated • Ready to Orbit'}
+                      </span>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            )}
 
             <canvas
               ref={canvasRef}

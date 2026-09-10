@@ -70,6 +70,8 @@ export default defineConfig(() => {
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
+        '@vercel/speed-insights/next': '@vercel/speed-insights/react',
+        '@vercel/analytics/next': '@vercel/analytics/react',
       },
     },
     server: {

@@ -1,5 +1,6 @@
 import React from 'react';
-import { X, ShieldCheck, FileText, Lock } from 'lucide-react';
+import { X, ShieldCheck, FileText, Lock, Mail, Phone, MapPin } from 'lucide-react';
+import { KREAN_OFFICIAL_DETAILS } from '../../data/kreanBrandData';
 
 interface LegalModalProps {
   isOpen: boolean;
@@ -10,20 +11,26 @@ interface LegalModalProps {
 export const LegalModal: React.FC<LegalModalProps> = ({ isOpen, onClose, topic }) => {
   if (!isOpen) return null;
 
+  const isShipping = topic.toLowerCase().includes('shipping');
+  const isRefund = topic.toLowerCase().includes('refund') || topic.toLowerCase().includes('exchange');
+  const isPrivacy = topic.toLowerCase().includes('privacy');
+  const isTerms = topic.toLowerCase().includes('terms');
+  const isContact = topic.toLowerCase().includes('contact');
+
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6">
-      <div className="relative w-full max-w-2xl bg-[#0d0d0d] border border-[#2a241b] rounded-sm shadow-2xl p-6 sm:p-10 text-left max-h-[85vh] overflow-y-auto">
+      <div className="relative w-full max-w-3xl bg-[#0d0d0d] border border-[#2a241b] rounded-sm shadow-2xl p-6 sm:p-10 text-left max-h-[85vh] overflow-y-auto">
         
         <button
           onClick={onClose}
-          className="absolute top-6 right-6 text-[#8e8a80] hover:text-[#f4f2ee] transition-colors p-1"
+          className="absolute top-6 right-6 text-[#8e8a80] hover:text-[#f4f2ee] transition-colors p-1 cursor-pointer"
         >
           <X className="w-5 h-5" />
         </button>
 
         <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] text-[#c9a86a] font-medium mb-1">
           <FileText className="w-3.5 h-3.5" />
-          <span>Legal & Institutional Governance</span>
+          <span>KREAN JEWELS Official Governance & Policies</span>
         </div>
 
         <h3 className="font-serif-luxury text-2xl sm:text-3xl text-[#f4f2ee] font-light">
@@ -31,88 +38,143 @@ export const LegalModal: React.FC<LegalModalProps> = ({ isOpen, onClose, topic }
         </h3>
 
         <div className="mt-6 text-xs text-[#a8a49a] space-y-4 font-light leading-relaxed">
-          {topic.includes('Privacy') && (
-            <>
-              <p>
-                <strong>1. Information Collection & Client Discretion:</strong> KREAN JEWELS respects the utmost privacy of its private patrons and trade clients. All diamond inquiries, bespoke CAD schematics, and settlement transactions are treated under strict confidentiality agreements.
+          {isShipping && (
+            <div className="space-y-4">
+              <p className="text-[#f4f2ee] font-medium">
+                Official Shipping & Insurance Policy • Last Updated August 2026
               </p>
               <p>
-                <strong>2. Data Encryption:</strong> Client communications and trade portal access are encrypted via 256-bit SSL protocols. We do not sell, license, or disclose client identity rosters to third-party marketing entities.
+                At KREAN JEWELS, every order is prepared, inspected through our quality assurance process, professionally packaged, and securely protected for transit.
               </p>
+              <div className="p-3 bg-[#14120e] border border-[#251f15] space-y-1 text-[#d8d3c7]">
+                <p><strong>Order Processing Days:</strong> Monday – Friday (Cut-off: 4:00 PM Eastern Time)</p>
+                <p><strong>Standard Processing:</strong> 3–5 business days following payment verification</p>
+                <p><strong>Bespoke / Custom CAD:</strong> Custom production timelines provided during consultation</p>
+              </div>
+              <h4 className="text-sm text-[#f4f2ee] font-medium pt-2">Global Shipping Partners & Insurance</h4>
               <p>
-                <strong>3. Regulatory Compliance:</strong> We adhere to GDPR standards for European Union transactions and US federal consumer data protection frameworks.
+                We partner with <strong>FedEx, DHL Express, UPS, and USPS</strong>. Every parcel is 100% fully insured during transit against damage or loss and requires government-issued photo identification and signature upon delivery.
               </p>
-            </>
+              <h4 className="text-sm text-[#f4f2ee] font-medium pt-2">Estimated Delivery Times</h4>
+              <ul className="list-disc pl-5 space-y-1">
+                <li><strong>United States:</strong> Express: 9–13 Business Days | Standard: 11–18 Business Days</li>
+                <li><strong>International (DHL / FedEx):</strong> Express: 7–12 Business Days | Standard: 11–21 Business Days</li>
+                <li><strong>Delivered Duty Paid (DDP):</strong> Available for eligible countries; import duties and taxes are prepaid prior to dispatch.</li>
+              </ul>
+            </div>
           )}
 
-          {topic.includes('Terms') && (
-            <>
-              <p>
-                <strong>1. Acceptance of Terms:</strong> By accessing the KREAN JEWELS digital salon or entering into wholesale purchase orders, clients agree to abide by these Terms of Service.
+          {isRefund && (
+            <div className="space-y-4">
+              <p className="text-[#f4f2ee] font-medium">
+                Return, Refund & Exchange Policy • Last Updated June 2026
               </p>
               <p>
-                <strong>2. Stone Availability & Quotations:</strong> Loose diamond pricing reflects daily Rapaport and synthetic trading indices. Quotations remain binding for 72 hours following official transmission.
+                Given the high-value, personalized, and made-to-order nature of fine jewelry, diamonds, and bespoke creations, purchases are considered final sale upon order confirmation.
               </p>
+              <div className="p-3 bg-[#14120e] border border-[#251f15] space-y-1 text-[#d8d3c7]">
+                <p><strong>Non-Returnable Items:</strong> Lab-grown diamonds, certified loose stones, diamond jewelry, custom-sized rings, and personalized engraved pieces.</p>
+              </div>
+              <h4 className="text-sm text-[#f4f2ee] font-medium pt-2">Damaged, Defective or Transit Issue Protocol</h4>
               <p>
-                <strong>3. Intellectual Property:</strong> All jewelry designs, CAD models, and website editorial contents are exclusive proprietary assets of KREAN JEWELS.
+                If you receive an item with transit damage or material defect, you must notify KREAN JEWELS within <strong>48 hours of confirmed delivery</strong> at <em>support@kreanjewels.com</em> with your order number and an unedited continuous unboxing video showing packaging, shipping label, and the piece.
               </p>
-            </>
+            </div>
           )}
 
-          {topic.includes('Shipping') && (
-            <>
-              <p>
-                <strong>1. Armored & Insured Transit:</strong> All finished fine jewelry and loose diamonds are transported exclusively via Malca-Amit, Brink’s Global Services, or FedEx Custom Critical with 100% full-value transit insurance.
+          {isPrivacy && (
+            <div className="space-y-4">
+              <p className="text-[#f4f2ee] font-medium">
+                Privacy & Data Protection Policy • Last Updated July 2026
               </p>
               <p>
-                <strong>2. Delivery Confirmation:</strong> Shipments require government-issued photo identification and adult signature upon physical handover.
+                KREAN JEWELS values your trust and safeguards all private patron records, bespoke CAD schematics, transaction settlement data, and diamond dossiers under 256-bit enterprise encryption.
               </p>
-              <p>
-                <strong>3. International Customs & Duties:</strong> For global shipments outside Belgium, customs clearance documentation and certificates of origin (stating Lab-Grown Diamond under HS Code 7104.91) accompany every parcel.
-              </p>
-            </>
+              <ul className="list-disc pl-5 space-y-1">
+                <li>We do not sell, rent, or trade client identity registries or diamond purchase details to third-party data brokers.</li>
+                <li>Payment details are tokenized securely through PCI-DSS Level 1 payment processing gateways.</li>
+                <li>Compliant with GDPR (EU/EEA) and US Federal/State consumer privacy regulations.</li>
+              </ul>
+            </div>
           )}
 
-          {topic.includes('Refund') && (
-            <>
-              <p>
-                <strong>1. 30-Day Inspection Period:</strong> For standard catalogue fine jewelry and unmounted certified diamonds, clients enjoy a 30-day examination window from confirmed delivery date.
+          {isTerms && (
+            <div className="space-y-4">
+              <p className="text-[#f4f2ee] font-medium">
+                Terms of Service & Atelier Governance
               </p>
               <p>
-                <strong>2. Laboratory Dossier Return:</strong> Items must be returned in unaltered condition with original tamper-evident security seals intact and all accompanying IGI or HRD certificates.
+                By accessing the KREAN JEWELS digital salon or purchasing from our collection, you agree to these Terms. All lab-grown diamonds are Type IIa CVD crystals certified by international gemological institutes (IGI / HRD) according to the 4Cs.
               </p>
-              <p>
-                <strong>3. Bespoke Commissions:</strong> Custom design pieces crafted to unique client specifications or personalized engravings are non-refundable once final 3D CAD approval has been authorized.
-              </p>
-            </>
+              <ul className="list-disc pl-5 space-y-1">
+                <li>Loose diamond quotations remain binding for 72 hours from issuance.</li>
+                <li>All proprietary CAD models, editorial photography, and brand marks are intellectual property of KREAN JEWELS.</li>
+              </ul>
+            </div>
           )}
 
-          {topic.includes('Notice') || topic.includes('Conflict') ? (
-            <>
+          {isContact && (
+            <div className="space-y-3">
+              <div className="p-4 bg-[#14120e] border border-[#262014] space-y-2 text-[#d8d3c7]">
+                <div className="flex items-start gap-2">
+                  <MapPin className="w-4 h-4 text-[#c9a86a] shrink-0 mt-0.5" />
+                  <div>
+                    <strong>US Headquarters:</strong> {KREAN_OFFICIAL_DETAILS.headquarters.formattedAddress}
+                  </div>
+                </div>
+                <div className="flex items-start gap-2">
+                  <MapPin className="w-4 h-4 text-[#c9a86a] shrink-0 mt-0.5" />
+                  <div>
+                    <strong>Antwerp Bourse Atelier:</strong> {KREAN_OFFICIAL_DETAILS.atelierAntwerp}
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 pt-2">
+                  <Mail className="w-4 h-4 text-[#c9a86a]" />
+                  <a href={`mailto:${KREAN_OFFICIAL_DETAILS.contact.primaryEmail}`} className="text-[#c9a86a] hover:underline">
+                    {KREAN_OFFICIAL_DETAILS.contact.primaryEmail}
+                  </a>
+                  <span className="text-[#686357]">|</span>
+                  <a href={`mailto:${KREAN_OFFICIAL_DETAILS.contact.supportEmail}`} className="text-[#c9a86a] hover:underline">
+                    {KREAN_OFFICIAL_DETAILS.contact.supportEmail}
+                  </a>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Phone className="w-4 h-4 text-[#c9a86a]" />
+                  <a href={`tel:${KREAN_OFFICIAL_DETAILS.contact.phone}`} className="text-[#f4f2ee] font-mono hover:text-[#c9a86a]">
+                    {KREAN_OFFICIAL_DETAILS.contact.formattedPhone}
+                  </a>
+                </div>
+                <div className="pt-2 text-xs text-[#8e8a80]">
+                  <strong>Concierge Support Hours:</strong><br />
+                  Monday – Friday: {KREAN_OFFICIAL_DETAILS.supportHours.monToFri}<br />
+                  Saturday: {KREAN_OFFICIAL_DETAILS.supportHours.saturday}<br />
+                  Sunday: {KREAN_OFFICIAL_DETAILS.supportHours.sunday}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Conflict Free & Sustainability statement */}
+          {topic.toLowerCase().includes('conflict') || topic.toLowerCase().includes('notice') ? (
+            <div className="space-y-3 pt-2">
+              <div className="flex items-center gap-2 text-[#c9a86a]">
+                <ShieldCheck className="w-4 h-4" />
+                <span className="font-medium uppercase tracking-wider text-xs">100% Conflict-Free Lab-Grown Declaration</span>
+              </div>
               <p>
-                <strong>1. 100% Conflict-Free Guarantee:</strong> KREAN JEWELS explicitly warrants that all diamonds sold are grown in certified plasma laboratories, completely bypassing terrestrial conflict regions, war zones, and unregulated mining supply chains.
+                KREAN JEWELS exclusively produces CVD lab-grown diamonds, entirely bypassing terrestrial conflict zones, cartel pricing, and ecological devastation. Every diamond is grown under clean laboratory plasma conditions and is physically, chemically, and optically identical to mined diamonds.
               </p>
-              <p>
-                <strong>2. Sustainability & SCS-007 Verification:</strong> Our production utilizes renewable power grids and recycled precious metals in accordance with SCS-007 Climate Neutral Diamond standards.
-              </p>
-            </>
+            </div>
           ) : null}
-
-          {topic.includes('Contact') && (
-            <>
-              <p>
-                <strong>Antwerp Atelier:</strong> Hoveniersstraat 53, Diamond District, 2018 Antwerp, Belgium.<br />
-                <strong>Mumbai Diamond Bourse:</strong> Tower C, Bandra Kurla Complex, Mumbai 400051.<br />
-                <strong>Direct Desk:</strong> +1 (800) 845-KREAN | concierge@kreanjewels.com
-              </p>
-            </>
-          )}
         </div>
 
-        <div className="mt-8 pt-4 border-t border-[#1f1c16] flex justify-end">
+        <div className="mt-8 pt-4 border-t border-[#1f1c16] flex items-center justify-between">
+          <div className="text-[10px] text-[#635e53]">
+            Official KREAN JEWELS Documentation
+          </div>
           <button
             onClick={onClose}
-            className="px-6 py-2 border border-[#332e24] text-xs uppercase tracking-wider text-[#c9a86a] hover:bg-[#c9a86a] hover:text-[#080808] transition-colors"
+            className="px-6 py-2 border border-[#332e24] text-xs uppercase tracking-wider text-[#c9a86a] hover:bg-[#c9a86a] hover:text-[#080808] transition-colors cursor-pointer"
           >
             Acknowledge & Close
           </button>

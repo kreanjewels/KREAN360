@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 import { Header } from './components/Header';
 import { HeroVideo } from './components/HeroVideo';
 import { DiamondScrubber } from './components/DiamondScrubber';
@@ -221,6 +223,8 @@ export function App() {
         onClose={() => setLegalTopic(null)}
       />
 
+      <SpeedInsights />
+      <Analytics />
     </div>
   );
 }

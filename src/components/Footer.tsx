@@ -119,30 +119,35 @@ export const Footer: React.FC<FooterProps> = ({ onOpenLegal, onOpenCert, onOpenT
           {/* Contact Block (3 cols) */}
           <div className="lg:col-span-3 space-y-3">
             <span className="text-[11px] uppercase tracking-[0.22em] text-[#f4f2ee] font-medium block">
-              Atelier Addresses
+              Official Atelier & Headquarters
             </span>
             <div className="space-y-2.5 text-xs">
               <div className="flex items-start gap-2">
                 <MapPin className="w-3.5 h-3.5 text-[#c9a86a] shrink-0 mt-0.5" />
                 <span className="text-[#a8a49a]">
-                  <strong>Antwerp:</strong> Hoveniersstraat 53, Diamond District, 2018 Antwerp, Belgium
+                  <strong>US HQ:</strong> 627 Tyler Matthew Ln, Indian Trail, NC 28079, United States
                 </span>
               </div>
               <div className="flex items-start gap-2">
                 <MapPin className="w-3.5 h-3.5 text-[#c9a86a] shrink-0 mt-0.5" />
                 <span className="text-[#a8a49a]">
-                  <strong>Mumbai:</strong> Bharat Diamond Bourse, Bandra Kurla Complex, Mumbai 400051
+                  <strong>Antwerp Bourse:</strong> Hoveniersstraat 53, Diamond District, 2018 Antwerp, Belgium
                 </span>
               </div>
               <div className="flex items-center gap-2 pt-2 text-[#dcd7cc]">
                 <Mail className="w-3.5 h-3.5 text-[#c9a86a]" />
-                <a href="mailto:concierge@kreanjewels.com" className="hover:text-[#c9a86a] transition-colors">
-                  concierge@kreanjewels.com
+                <a href="mailto:info@kreanjewels.com" className="hover:text-[#c9a86a] transition-colors">
+                  info@kreanjewels.com
                 </a>
               </div>
               <div className="flex items-center gap-2 text-[#dcd7cc]">
                 <Phone className="w-3.5 h-3.5 text-[#c9a86a]" />
-                <span>+1 (800) 845-KREAN</span>
+                <a href="tel:+13364885522" className="hover:text-[#c9a86a] transition-colors">
+                  +1 (336) 488-5522
+                </a>
+              </div>
+              <div className="text-[10px] text-[#787367] pt-1">
+                Concierge Desk: Mon–Fri 9:00 AM – 6:00 PM EST
               </div>
             </div>
           </div>

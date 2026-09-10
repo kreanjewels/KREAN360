@@ -60,11 +60,33 @@ export const Header: React.FC<HeaderProps> = ({
         id="main-header"
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           isScrolled
-            ? 'bg-[#0a0a0a]/92 backdrop-blur-md border-b border-[#26221a] py-3 shadow-2xl'
-            : 'bg-gradient-to-b from-black/80 via-black/40 to-transparent py-5'
+            ? 'bg-[#0a0a0a]/95 backdrop-blur-md border-b border-[#26221a] shadow-2xl'
+            : 'bg-gradient-to-b from-black/90 via-black/50 to-transparent'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
+        {/* Top Announcement Ribbon */}
+        <div className={`w-full bg-[#050505] border-b border-[#1c1914] text-[10px] tracking-[0.2em] uppercase py-1.5 px-4 text-[#a8a396] transition-all duration-300 ${isScrolled ? 'hidden md:block py-1 text-[9px]' : ''}`}>
+          <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+            <div className="hidden lg:flex items-center gap-2 text-[#c9a86a]">
+              <Sparkles className="w-3 h-3 text-[#c9a86a]" />
+              <span className="tracking-[0.22em]">KREAN JEWELS &bull; Innovation &amp; Brilliance</span>
+            </div>
+            <div className="flex-1 text-center text-[#ded8cc] tracking-[0.2em]">
+              <span>Complimentary Insured Worldwide Delivery &bull; 100% Certified Lab-Grown CVD</span>
+            </div>
+            <div className="hidden sm:flex items-center gap-4 text-[#8c7343]">
+              <a href="tel:+13364885522" className="hover:text-[#c9a86a] transition-colors">
+                +1 (336) 488-5522
+              </a>
+              <span className="text-[#3a3429]">&bull;</span>
+              <a href="mailto:info@kreanjewels.com" className="hover:text-[#c9a86a] transition-colors">
+                info@kreanjewels.com
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div className={`max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between transition-all duration-300 ${isScrolled ? 'py-3' : 'py-4 md:py-5'}`}>
           {/* Left: Brand Wordmark */}
           <a
             href="#"
@@ -74,8 +96,8 @@ export const Header: React.FC<HeaderProps> = ({
             <span className="font-serif-luxury text-xl md:text-2xl tracking-[0.25em] font-medium text-[#f4f2ee] group-hover:text-[#c9a86a] transition-colors duration-300">
               KREAN JEWELS
             </span>
-            <span className="text-[9px] uppercase tracking-[0.35em] text-[#c9a86a]/90 font-light -mt-0.5">
-              Haute Diamantaire
+            <span className="text-[9px] uppercase tracking-[0.32em] text-[#c9a86a]/90 font-light -mt-0.5">
+              Certified CVD Lab-Grown Diamonds
             </span>
           </a>
 
