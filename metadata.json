@@ -1,0 +1,7 @@
+{
+  "name": "KREAN JEWELS — Certified Lab-Grown Diamonds & Fine Jewelry",
+  "description": "Dark cinematic landing experience for KREAN JEWELS. Certified lab-grown loose diamonds, fine jewelry, custom design journey, and trade sourcing.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
