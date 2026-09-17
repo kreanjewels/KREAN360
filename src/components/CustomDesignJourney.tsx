@@ -23,11 +23,11 @@ export const CustomDesignJourney: React.FC<CustomDesignJourneyProps> = ({
         
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="text-[10px] uppercase tracking-[0.3em] text-[#c9a86a] font-medium flex items-center justify-center gap-2">
+          <span className="text-[10px] uppercase tracking-[0.35em] text-[#c9a86a] font-medium flex items-center justify-center gap-2">
             <Sparkles className="w-3.5 h-3.5 text-[#c9a86a]" />
             <span>Bespoke Commissioning</span>
           </span>
-          <h2 className="font-serif-luxury text-3xl sm:text-5xl md:text-6xl text-[#f4f2ee] font-light mt-3">
+          <h2 className="font-serif-luxury text-4xl sm:text-6xl md:text-7xl text-[#f4f2ee] font-normal tracking-[0.03em] mt-3 leading-tight">
             The Custom Design Journey.
           </h2>
           <p className="text-xs sm:text-sm text-[#9e9a8f] mt-4 font-light leading-relaxed">
@@ -70,16 +70,16 @@ export const CustomDesignJourney: React.FC<CustomDesignJourneyProps> = ({
             
             {/* Step Description & Milestones (7 cols) */}
             <div className="lg:col-span-7 space-y-6">
-              <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.25em] text-[#c9a86a]">
+              <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] text-[#c9a86a]">
                 <Clock className="w-3.5 h-3.5" />
                 <span>Estimated Turnaround: {activeStep.timeline}</span>
               </div>
 
-              <h3 className="font-serif-luxury text-2xl sm:text-4xl text-[#f4f2ee] font-light leading-snug">
+              <h3 className="font-serif-luxury text-3xl sm:text-5xl text-[#f4f2ee] font-normal tracking-[0.025em] leading-snug">
                 Step 0{activeStep.stepNumber}: {activeStep.title}
               </h3>
 
-              <div className="text-xs uppercase tracking-wider text-[#c9a86a]/90 font-medium">
+              <div className="text-xs uppercase tracking-[0.2em] text-[#c9a86a]/90 font-medium">
                 {activeStep.highlight}
               </div>
 

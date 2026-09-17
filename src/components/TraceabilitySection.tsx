@@ -24,16 +24,16 @@ export const TraceabilitySection: React.FC<TraceabilitySectionProps> = ({ onOpen
 
         {/* Quiet headline pairing two words */}
         <div className="space-y-2">
-          <h2 className="font-serif-luxury text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-light tracking-tight text-[#f4f2ee] leading-none">
+          <h2 className="font-serif-luxury text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-normal tracking-[0.03em] text-[#f4f2ee] leading-none">
             Certified. Consistent.
           </h2>
-          <div className="text-[10px] uppercase tracking-[0.4em] text-[#8c7343] font-light">
+          <div className="text-[10px] uppercase tracking-[0.45em] text-[#8c7343] font-light">
             Uncompromising Lab Standards
           </div>
         </div>
 
         {/* Single supporting sentence */}
-        <p className="font-serif-luxury italic text-base sm:text-xl md:text-2xl text-[#c5c1b8] max-w-2xl font-normal leading-relaxed">
+        <p className="font-serif-luxury italic text-lg sm:text-2xl md:text-3xl text-[#c5c1b8] max-w-2xl font-normal leading-relaxed tracking-[0.02em]">
           "Every KREAN JEWELS diamond is graded by IGI or HRD and documented from certification through to final setting."
         </p>
 

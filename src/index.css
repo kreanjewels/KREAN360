@@ -13,14 +13,16 @@
     letter-spacing: 0.015em;
   }
 
-  h1, h2, h3, .font-serif-luxury {
+  h1, h2, h3, h4, h5, h6, .font-serif-luxury {
     font-family: var(--font-serif);
     font-feature-settings: "liga" 1, "kern" 1;
+    letter-spacing: 0.025em;
   }
 }
 
 .font-serif-luxury {
   font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  letter-spacing: 0.025em;
 }
 
 .font-sans-luxury {

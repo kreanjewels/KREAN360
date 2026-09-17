@@ -19,11 +19,11 @@ export const EditorialSection: React.FC<EditorialSectionProps> = ({ onOpenArticl
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 pb-8 border-b border-[#1f1c16]">
           <div>
-            <span className="text-[10px] uppercase tracking-[0.3em] text-[#c9a86a] font-medium flex items-center gap-2">
+            <span className="text-[10px] uppercase tracking-[0.35em] text-[#c9a86a] font-medium flex items-center gap-2">
               <BookOpen className="w-3.5 h-3.5 text-[#c9a86a]" />
               <span>Editorial Journal</span>
             </span>
-            <h2 className="font-serif-luxury text-3xl sm:text-5xl md:text-6xl text-[#f4f2ee] font-light mt-3">
+            <h2 className="font-serif-luxury text-4xl sm:text-6xl md:text-7xl text-[#f4f2ee] font-normal tracking-[0.03em] mt-3 leading-tight">
               The Diamond Gazette.
             </h2>
           </div>
@@ -71,11 +71,11 @@ export const EditorialSection: React.FC<EditorialSectionProps> = ({ onOpenArticl
               </span>
             </div>
 
-            <h3 className="font-serif-luxury text-2xl sm:text-3xl md:text-4xl text-[#f4f2ee] font-light leading-snug group-hover:text-[#c9a86a] transition-colors">
+            <h3 className="font-serif-luxury text-3xl sm:text-4xl md:text-5xl text-[#f4f2ee] font-normal tracking-[0.025em] leading-snug group-hover:text-[#c9a86a] transition-colors">
               {article.title}
             </h3>
 
-            <p className="text-xs uppercase tracking-wider text-[#8c7343] font-medium">
+            <p className="text-xs uppercase tracking-[0.2em] text-[#8c7343] font-medium">
               {article.subtitle}
             </p>
 

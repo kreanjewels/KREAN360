@@ -93,10 +93,10 @@ export const Header: React.FC<HeaderProps> = ({
             id="brand-logo-link"
             className="group flex flex-col items-start focus:outline-none"
           >
-            <span className="font-serif-luxury text-xl md:text-2xl tracking-[0.25em] font-medium text-[#f4f2ee] group-hover:text-[#c9a86a] transition-colors duration-300">
+            <span className="font-serif-luxury text-2xl md:text-3xl tracking-[0.3em] font-medium text-[#f4f2ee] group-hover:text-[#c9a86a] transition-colors duration-300">
               KREAN JEWELS
             </span>
-            <span className="text-[9px] uppercase tracking-[0.32em] text-[#c9a86a]/90 font-light -mt-0.5">
+            <span className="text-[9px] uppercase tracking-[0.38em] text-[#c9a86a]/90 font-light -mt-0.5">
               Certified CVD Lab-Grown Diamonds
             </span>
           </a>

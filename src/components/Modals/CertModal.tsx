@@ -31,12 +31,12 @@ export const CertModal: React.FC<CertModalProps> = ({
         </button>
 
         {/* Modal Header */}
-        <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] text-[#c9a86a] font-medium mb-2">
+        <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.35em] text-[#c9a86a] font-medium mb-2">
           <ShieldCheck className="w-4 h-4 text-[#c9a86a]" />
           <span>Independent Laboratory Verification</span>
         </div>
 
-        <h3 className="font-serif-luxury text-2xl sm:text-4xl text-[#f4f2ee] font-light">
+        <h3 className="font-serif-luxury text-3xl sm:text-4xl md:text-5xl text-[#f4f2ee] font-normal tracking-[0.025em]">
           Diamond Certification & Grading Dossier
         </h3>
 

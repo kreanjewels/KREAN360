@@ -23,10 +23,10 @@ export const Footer: React.FC<FooterProps> = ({ onOpenLegal, onOpenCert, onOpenT
           {/* Brand Info (4 cols) */}
           <div className="lg:col-span-4 space-y-4">
             <div className="flex flex-col">
-              <span className="font-serif-luxury text-2xl tracking-[0.25em] font-medium text-[#f4f2ee]">
+              <span className="font-serif-luxury text-2xl sm:text-3xl tracking-[0.3em] font-medium text-[#f4f2ee]">
                 KREAN JEWELS
               </span>
-              <span className="text-[9px] uppercase tracking-[0.35em] text-[#c9a86a] -mt-0.5">
+              <span className="text-[9px] uppercase tracking-[0.4em] text-[#c9a86a] -mt-0.5">
                 Haute Diamantaire
               </span>
             </div>

@@ -10,7 +10,8 @@ import {
   Check, 
   Gem,
   Info,
-  Search
+  Search,
+  ChevronDown
 } from 'lucide-react';
 
 interface CalibratedDiamondsProps {
@@ -19,6 +20,8 @@ interface CalibratedDiamondsProps {
   onAddToCart: (product: JewelryProduct) => void;
   onViewCert: (certNum: string) => void;
   onRequestCustom: (productName?: string) => void;
+  selectedCategory?: 'all' | 'rings' | 'bracelets' | 'earrings' | 'pendants' | 'loose';
+  onSelectCategory?: (category: 'all' | 'rings' | 'bracelets' | 'earrings' | 'pendants' | 'loose') => void;
 }
 
 export const CalibratedDiamonds: React.FC<CalibratedDiamondsProps> = ({
@@ -27,9 +30,20 @@ export const CalibratedDiamonds: React.FC<CalibratedDiamondsProps> = ({
   onAddToCart,
   onViewCert,
   onRequestCustom,
+  selectedCategory,
+  onSelectCategory,
 }) => {
   const [caratSliderValue, setCaratSliderValue] = useState<number>(2.0);
-  const [activeCategory, setActiveCategory] = useState<'all' | 'rings' | 'bracelets' | 'earrings' | 'pendants' | 'loose'>('all');
+  const [showCaratMatrix, setShowCaratMatrix] = useState<boolean>(false);
+  const [internalCategory, setInternalCategory] = useState<'all' | 'rings' | 'bracelets' | 'earrings' | 'pendants' | 'loose'>('all');
+  
+  const activeCategory = selectedCategory !== undefined ? selectedCategory : internalCategory;
+  const setActiveCategory = (cat: 'all' | 'rings' | 'bracelets' | 'earrings' | 'pendants' | 'loose') => {
+    if (onSelectCategory) {
+      onSelectCategory(cat);
+    }
+    setInternalCategory(cat);
+  };
   const [activeShapeFilter, setActiveShapeFilter] = useState<DiamondShape | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [sortBy, setSortBy] = useState<'featured' | 'price-asc' | 'price-desc' | 'carat-desc'>('featured');
@@ -87,84 +101,98 @@ export const CalibratedDiamonds: React.FC<CalibratedDiamondsProps> = ({
       <div className="max-w-7xl mx-auto">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="text-[10px] uppercase tracking-[0.3em] text-[#c9a86a] font-medium flex items-center justify-center gap-2">
+        <div className="text-center max-w-3xl mx-auto mb-12">
+          <span className="text-[10px] uppercase tracking-[0.35em] text-[#c9a86a] font-medium flex items-center justify-center gap-2">
             <Gem className="w-3.5 h-3.5 text-[#c9a86a]" />
-            <span>KREAN JEWELS Official Collection</span>
+            <span>KREAN JEWELS Masterpieces</span>
           </span>
-          <h2 className="font-serif-luxury text-3xl sm:text-5xl md:text-6xl text-[#f4f2ee] font-light mt-3">
-            Your Vision, Our Diamonds.
+          <h2 className="font-serif-luxury text-4xl sm:text-6xl md:text-7xl text-[#f4f2ee] font-normal tracking-[0.03em] mt-3 leading-tight">
+            Handcrafted Fine Jewelry
           </h2>
-          <p className="text-xs sm:text-sm text-[#9e9a8f] mt-4 font-light leading-relaxed">
-            Certified CVD lab-grown diamonds, high jewelry creations, and calibrated wholesale layouts directly from our atelier.
+          <p className="text-xs sm:text-sm text-[#9e9a8f] mt-3 font-light leading-relaxed">
+            Certified CVD lab-grown diamonds set in 14K/18K solid gold and platinum, calibrated with Type IIa crystal purity.
           </p>
+
+          {/* Toggle button for technical carat & ratio guide */}
+          <div className="mt-6 flex justify-center">
+            <button
+              onClick={() => setShowCaratMatrix(!showCaratMatrix)}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#262016] hover:border-[#c9a86a]/60 bg-[#0d0d0d] text-[10px] uppercase tracking-[0.2em] text-[#c9a86a] transition-all cursor-pointer shadow-md hover:bg-[#14120d]"
+            >
+              <Sliders className="w-3 h-3" />
+              <span>{showCaratMatrix ? 'Hide Carat & Ratio Guide' : 'View Carat & Ratio Guide (0.50 – 10.00 CT)'}</span>
+              <ChevronDown className={`w-3 h-3 transition-transform duration-300 ${showCaratMatrix ? 'rotate-180' : ''}`} />
+            </button>
+          </div>
         </div>
 
-        {/* 1. Interactive Carat Range Slider & Dimensional Matrix */}
-        <div className="bg-[#0e0e0e] border border-[#231f18] p-6 sm:p-10 rounded-sm mb-16 shadow-2xl relative overflow-hidden">
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 pb-8 border-b border-[#1f1c16]">
-            
-            {/* Slider Control */}
-            <div className="flex-1">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-xs uppercase tracking-[0.2em] text-[#c9a86a] font-medium flex items-center gap-2">
-                  <Sliders className="w-3.5 h-3.5 text-[#c9a86a]" />
-                  <span>Optical Carat Calibrator</span>
-                </span>
-                <span className="text-sm font-mono text-[#f4f2ee]">
-                  {caratSliderValue.toFixed(2)} CT
-                </span>
+        {/* 1. Optional Interactive Carat Range Slider & Dimensional Matrix */}
+        {showCaratMatrix && (
+          <div className="bg-[#0e0e0e] border border-[#231f18] p-6 sm:p-10 rounded-sm mb-16 shadow-2xl relative overflow-hidden animate-fadeIn">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 pb-8 border-b border-[#1f1c16]">
+              
+              {/* Slider Control */}
+              <div className="flex-1">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs uppercase tracking-[0.2em] text-[#c9a86a] font-medium flex items-center gap-2">
+                    <Sliders className="w-3.5 h-3.5 text-[#c9a86a]" />
+                    <span>Optical Carat Calibrator</span>
+                  </span>
+                  <span className="text-sm font-mono text-[#f4f2ee]">
+                    {caratSliderValue.toFixed(2)} CT
+                  </span>
+                </div>
+
+                <input
+                  type="range"
+                  min="0.5"
+                  max="10.0"
+                  step="0.25"
+                  value={caratSliderValue}
+                  onChange={(e) => setCaratSliderValue(parseFloat(e.target.value))}
+                  className="w-full h-1.5 bg-[#1f1c16] rounded-lg appearance-none cursor-pointer accent-[#c9a86a]"
+                />
+
+                <div className="flex justify-between text-[10px] text-[#716c61] font-mono mt-2">
+                  <span>0.50 ct</span>
+                  <span>2.00 ct</span>
+                  <span>5.00 ct</span>
+                  <span>7.50 ct</span>
+                  <span>10.00 ct</span>
+                </div>
               </div>
 
-              <input
-                type="range"
-                min="0.5"
-                max="10.0"
-                step="0.25"
-                value={caratSliderValue}
-                onChange={(e) => setCaratSliderValue(parseFloat(e.target.value))}
-                className="w-full h-1.5 bg-[#1f1c16] rounded-lg appearance-none cursor-pointer accent-[#c9a86a]"
-              />
-
-              <div className="flex justify-between text-[10px] text-[#716c61] font-mono mt-2">
-                <span>0.50 ct</span>
-                <span>2.00 ct</span>
-                <span>5.00 ct</span>
-                <span>7.50 ct</span>
-                <span>10.00 ct</span>
+              {/* Dimensional Readout */}
+              <div className="flex flex-wrap items-center gap-6 lg:border-l lg:border-[#1f1c16] lg:pl-8">
+                <div>
+                  <span className="text-[10px] uppercase tracking-wider text-[#635e53] block">Table Ratio</span>
+                  <span className="font-mono text-sm text-[#f4f2ee]">{currentCaratSpec.tablePct}</span>
+                </div>
+                <div>
+                  <span className="text-[10px] uppercase tracking-wider text-[#635e53] block">Depth Ratio</span>
+                  <span className="font-mono text-sm text-[#f4f2ee]">{currentCaratSpec.depthPct}</span>
+                </div>
+                <div>
+                  <span className="text-[10px] uppercase tracking-wider text-[#635e53] block">Est. Spread</span>
+                  <span className="font-mono text-sm text-[#f4f2ee]">{currentCaratSpec.diameterMm}</span>
+                </div>
+                <div>
+                  <span className="text-[10px] uppercase tracking-wider text-[#635e53] block">Color / Clarity</span>
+                  <span className="font-mono text-sm text-[#c9a86a]">{currentCaratSpec.avgColor} / {currentCaratSpec.avgClarity}</span>
+                </div>
               </div>
             </div>
 
-            {/* Dimensional Readout */}
-            <div className="flex flex-wrap items-center gap-6 lg:border-l lg:border-[#1f1c16] lg:pl-8">
-              <div>
-                <span className="text-[10px] uppercase tracking-wider text-[#635e53] block">Table Ratio</span>
-                <span className="font-mono text-sm text-[#f4f2ee]">{currentCaratSpec.tablePct}</span>
-              </div>
-              <div>
-                <span className="text-[10px] uppercase tracking-wider text-[#635e53] block">Depth Ratio</span>
-                <span className="font-mono text-sm text-[#f4f2ee]">{currentCaratSpec.depthPct}</span>
-              </div>
-              <div>
-                <span className="text-[10px] uppercase tracking-wider text-[#635e53] block">Est. Spread</span>
-                <span className="font-mono text-sm text-[#f4f2ee]">{currentCaratSpec.diameterMm}</span>
-              </div>
-              <div>
-                <span className="text-[10px] uppercase tracking-wider text-[#635e53] block">Color / Clarity</span>
-                <span className="font-mono text-sm text-[#c9a86a]">{currentCaratSpec.avgColor} / {currentCaratSpec.avgClarity}</span>
-              </div>
+            <div className="pt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs text-[#8e8a80]">
+              <span className="font-light">
+                <strong className="text-[#f4f2ee]">Optimal Setting Application:</strong> {currentCaratSpec.idealApplication}
+              </span>
+              <span className="font-mono text-[10px] text-[#716c61]">
+                Sample Dossier: {currentCaratSpec.igiReportExample}
+              </span>
             </div>
           </div>
-
-          <div className="pt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs text-[#8e8a80]">
-            <span className="font-light">
-              <strong className="text-[#f4f2ee]">Optimal Setting Application:</strong> {currentCaratSpec.idealApplication}
-            </span>
-            <span className="font-mono text-[10px] text-[#716c61]">
-              Sample Dossier: {currentCaratSpec.igiReportExample}
-            </span>
-          </div>
-        </div>
+        )}
 
         {/* 2. Shape Selector Bar */}
         <div className="mb-12">
@@ -359,10 +387,10 @@ export const CalibratedDiamonds: React.FC<CalibratedDiamondsProps> = ({
 
                   {/* Product Details */}
                   <div className="p-5">
-                    <div className="text-[10px] uppercase tracking-[0.2em] text-[#787367] mb-1">
+                    <div className="text-[10px] uppercase tracking-[0.25em] text-[#787367] mb-1">
                       {product.metal}
                     </div>
-                    <h4 className="font-serif-luxury text-lg text-[#f4f2ee] font-medium leading-snug group-hover:text-[#c9a86a] transition-colors">
+                    <h4 className="font-serif-luxury text-xl sm:text-2xl text-[#f4f2ee] font-normal tracking-[0.025em] leading-snug group-hover:text-[#c9a86a] transition-colors">
                       {product.name}
                     </h4>
                     <p className="text-xs text-[#8e8a80] mt-2 line-clamp-2 leading-relaxed font-light">

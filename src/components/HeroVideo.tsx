@@ -61,32 +61,32 @@ export const HeroVideo: React.FC<HeroVideoProps> = ({ onExploreClick }) => {
       </div>
 
       {/* Overlaid Hero Content */}
-      <div className="relative z-10 max-w-5xl mx-auto px-6 text-center flex flex-col items-center justify-center space-y-6 md:space-y-8">
+      <div className="relative z-10 max-w-6xl mx-auto px-6 text-center flex flex-col items-center justify-center space-y-6 md:space-y-8">
         {/* Eyebrow badge */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#c9a86a]/30 bg-black/40 backdrop-blur-md text-[#c9a86a] text-[10px] tracking-[0.3em] uppercase">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#c9a86a]/30 bg-black/50 backdrop-blur-md text-[#c9a86a] text-[10px] tracking-[0.35em] uppercase">
           <Sparkles className="w-3 h-3 text-[#c9a86a]" />
-          <span>Haute Lab-Grown Diamonds</span>
+          <span>Where Innovation, Brilliance &amp; Craftsmanship Come Together</span>
         </div>
 
         {/* Brand Headline */}
-        <h1 className="font-serif-luxury text-4xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight text-[#f4f2ee] font-light leading-[1.08] max-w-4xl">
-          Grown in light, cut with precision.
+        <h1 className="font-serif-luxury text-5xl sm:text-7xl md:text-8xl lg:text-9xl tracking-[0.03em] text-[#f4f2ee] font-normal leading-[1.05] max-w-6xl">
+          Certified Lab-Grown Diamonds &amp; Fine Jewelry.
         </h1>
 
         {/* Poetic Subline */}
-        <p className="font-serif-luxury italic text-lg sm:text-2xl md:text-3xl text-[#d4cfc3] max-w-2xl font-normal leading-relaxed opacity-95">
-          "Certified from crystal to facet, expressed in fire."
+        <p className="font-serif-luxury italic text-xl sm:text-2xl md:text-3xl lg:text-4xl tracking-[0.02em] text-[#d4cfc3] max-w-3xl font-normal leading-relaxed opacity-95">
+          "100% pure carbon brilliance, sustainably grown, certified and timeless."
         </p>
 
         {/* Factual line breaks as visual punctuation */}
-        <div className="flex items-center justify-center gap-4 sm:gap-8 pt-2 text-[11px] sm:text-xs tracking-[0.28em] uppercase text-[#a8a49a] font-light">
-          <span>Grown with Purpose</span>
+        <div className="flex items-center justify-center gap-4 sm:gap-8 pt-2 text-[11px] sm:text-xs tracking-[0.32em] uppercase text-[#a8a49a] font-light">
+          <span>100% Conflict-Free CVD</span>
           <span className="w-1.5 h-1.5 rotate-45 border border-[#c9a86a]" />
-          <span>Certified</span>
+          <span>IGI &amp; HRD Certified</span>
           <span className="w-1.5 h-1.5 rotate-45 border border-[#c9a86a]" />
-          <span>Traceable</span>
+          <span>Type IIa Purity</span>
           <span className="w-1.5 h-1.5 rotate-45 border border-[#c9a86a]" />
-          <span>Timeless</span>
+          <span>Direct Atelier</span>
         </div>
 
         {/* Primary CTAs */}
@@ -94,27 +94,27 @@ export const HeroVideo: React.FC<HeroVideoProps> = ({ onExploreClick }) => {
           <button
             onClick={onExploreClick}
             id="hero-explore-btn"
-            className="w-full sm:w-auto px-8 py-3.5 text-xs tracking-[0.22em] uppercase border border-[#c9a86a] bg-[#c9a86a]/10 hover:bg-[#c9a86a] text-[#f4f2ee] hover:text-[#080808] transition-all duration-300 font-medium cursor-pointer"
+            className="w-full sm:w-auto px-8 py-3.5 text-xs tracking-[0.22em] uppercase border border-[#c9a86a] bg-[#c9a86a] text-[#080808] hover:bg-[#faebd7] transition-all duration-300 font-semibold cursor-pointer shadow-lg"
           >
-            Explore Master Collection
+            Shop Master Collection
           </button>
           <a
-            href="#diamond-turntable-section"
-            className="w-full sm:w-auto px-8 py-3.5 text-xs tracking-[0.22em] uppercase border border-[#332e24] hover:border-[#c9a86a]/60 text-[#c5c1b8] hover:text-[#f4f2ee] bg-black/40 backdrop-blur-md transition-all duration-300 font-normal"
+            href="#diamond-showcase-section"
+            className="w-full sm:w-auto px-8 py-3.5 text-xs tracking-[0.22em] uppercase border border-[#332e24] hover:border-[#c9a86a]/60 text-[#c5c1b8] hover:text-[#f4f2ee] bg-black/50 backdrop-blur-md transition-all duration-300 font-normal"
           >
-            Orbit 360° Stone
+            Inspect 360° Stone
           </a>
         </div>
       </div>
 
       {/* Faint scroll cue at bottom */}
       <a 
-        href="#diamond-turntable-section"
+        href="#diamond-showcase-section"
         id="hero-scroll-cue"
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 text-[#736e63] hover:text-[#c9a86a] transition-colors cursor-pointer group"
         aria-label="Scroll to interactive diamond rotation"
       >
-        <span className="text-[9px] uppercase tracking-[0.35em] font-light">Scroll to Orbit</span>
+        <span className="text-[9px] uppercase tracking-[0.35em] font-light">Scroll to Explore</span>
         <div className="w-5 h-8 rounded-full border border-[#332e24] group-hover:border-[#c9a86a] flex justify-center p-1 transition-colors">
           <div className="w-1 h-1.5 bg-[#c9a86a] rounded-full animate-bounce mt-1" />
         </div>

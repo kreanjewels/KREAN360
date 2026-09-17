@@ -5,8 +5,10 @@ import { Header } from './components/Header';
 import { HeroVideo } from './components/HeroVideo';
 import { DiamondScrubber } from './components/DiamondScrubber';
 import { TrustBar } from './components/TrustBar';
+import { FeaturedCollections } from './components/FeaturedCollections';
 import { MakingProcess } from './components/MakingProcess';
 import { CalibratedDiamonds } from './components/CalibratedDiamonds';
+import { CustomerReviews } from './components/CustomerReviews';
 import { TraceabilitySection } from './components/TraceabilitySection';
 import { MarqueeStrip } from './components/MarqueeStrip';
 import { HeritageAbout } from './components/HeritageAbout';
@@ -34,6 +36,7 @@ export function App() {
     { product: PRODUCTS_CATALOG[0], quantity: 1 } // seeded with 1 elegant piece
   ]);
   const [selectedShape, setSelectedShape] = useState<DiamondShape>('Round');
+  const [selectedCategory, setSelectedCategory] = useState<'all' | 'rings' | 'bracelets' | 'earrings' | 'pendants' | 'loose'>('all');
   
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -116,49 +119,48 @@ export function App() {
       />
 
       <main>
-        {/* 2. Full-bleed Hero Video with scroll indicator & serif poetic lines */}
+        {/* 1. Full-bleed Hero Video with brand greeting & CTAs */}
         <HeroVideo onExploreClick={scrollToExplore} />
 
-        {/* 3. Pinned Scroll-Scrubbed 360° Diamond Centerpiece with crossfading headlines */}
-        <DiamondScrubber />
-
-        {/* 4. Certifying Bodies Trust Bar (IGI, HRD Antwerp, Type IIa, SCS-007) */}
+        {/* 2. Independent Lab Certification Bar (IGI, HRD Antwerp, Type IIa, SCS-007) */}
         <TrustBar onOpenCertModal={() => setIsCertOpen(true)} />
 
-        {/* 5. "Grown with Purpose" 5-stage making process */}
-        <MakingProcess />
+        {/* 3. Curated Fine Jewelry Collections (Spacious visual category showcase) */}
+        <FeaturedCollections onSelectCategory={(cat) => setSelectedCategory(cat)} />
 
-        {/* 6. "Your Vision, Our Diamonds" (Carat slider, shape picker, 4-category grid) */}
+        {/* 4. Fine Jewelry Masterpieces Catalog (Category tabs, shape filters, instant cart) */}
         <CalibratedDiamonds
           selectedShape={selectedShape}
           onSelectShape={setSelectedShape}
+          selectedCategory={selectedCategory}
+          onSelectCategory={setSelectedCategory}
           onAddToCart={handleAddToCart}
           onViewCert={handleViewCert}
           onRequestCustom={handleRequestCustomJewelry}
         />
 
-        {/* 7. "Certified. Consistent." quiet cinematic traceability statement */}
-        <TraceabilitySection onOpenCertGuide={() => setIsCertOpen(true)} />
+        {/* 5. Ambient 360° Diamond Scintillation (Auto-orbiting background diamond) */}
+        <DiamondScrubber />
 
-        {/* 8. Repeating Value-Prop Marquee */}
-        <MarqueeStrip />
-
-        {/* 9. Heritage & "Since 2018" grand typographic stat treatment */}
-        <HeritageAbout onOpenStoryModal={() => setIsArticleOpen(true)} />
-
-        {/* 10. 6-Step Custom Design Journey & Commission CTAs */}
+        {/* 6. 3-Step Bespoke Custom Design Journey */}
         <CustomDesignJourney
           onRequestCustomDiamond={handleRequestCustomDiamond}
           onRequestCustomJewelry={() => handleRequestCustomJewelry()}
         />
 
-        {/* 11. Sourcing for the Trade & B2B Manufacturer Division */}
+        {/* 7. Verified Collector Reviews & Testimonials */}
+        <CustomerReviews />
+
+        {/* 8. Grown with Purpose CVD synthesis making process */}
+        <MakingProcess />
+
+        {/* 9. Heritage & Atelier Story */}
+        <HeritageAbout onOpenStoryModal={() => setIsArticleOpen(true)} />
+
+        {/* 10. Sourcing for the Trade & B2B Manufacturer Division */}
         <TradeSourcing onOpenTradeModal={() => setIsTradeOpen(true)} />
 
-        {/* 12. Editorial Journal Article Card */}
-        <EditorialSection onOpenArticleModal={() => setIsArticleOpen(true)} />
-
-        {/* 13. "Stay Connected" Newsletter & Concierge Band */}
+        {/* 11. "Stay Connected" Newsletter & Concierge Desk */}
         <NewsletterBand />
       </main>
 

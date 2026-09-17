@@ -16,12 +16,12 @@ export const TradeSourcing: React.FC<TradeSourcingProps> = ({ onOpenTradeModal }
           
           {/* Left: Heading & Capabilities (7 cols) */}
           <div className="lg:col-span-7 space-y-6">
-            <span className="text-[10px] uppercase tracking-[0.3em] text-[#c9a86a] font-medium flex items-center gap-2">
+            <span className="text-[10px] uppercase tracking-[0.35em] text-[#c9a86a] font-medium flex items-center gap-2">
               <Building2 className="w-3.5 h-3.5 text-[#c9a86a]" />
               <span>B2B & Manufacturer Division</span>
             </span>
 
-            <h2 className="font-serif-luxury text-3xl sm:text-5xl md:text-6xl text-[#f4f2ee] font-light leading-tight">
+            <h2 className="font-serif-luxury text-4xl sm:text-6xl md:text-7xl text-[#f4f2ee] font-normal tracking-[0.03em] leading-tight">
               Sourcing for the Trade.
             </h2>
 

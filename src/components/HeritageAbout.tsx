@@ -15,23 +15,23 @@ export const HeritageAbout: React.FC<HeritageAboutProps> = ({ onOpenStoryModal }
         
         {/* Left: Grand Typographic Stat Treatment (5 cols) */}
         <div className="lg:col-span-5 flex flex-col justify-center border-l-2 border-[#c9a86a]/40 pl-6 sm:pl-10">
-          <span className="text-[10px] uppercase tracking-[0.35em] text-[#c9a86a] font-medium block">
+          <span className="text-[10px] uppercase tracking-[0.4em] text-[#c9a86a] font-medium block">
             Committed to Excellence.
           </span>
 
           {/* Grand stat display matching SJWorld */}
-          <div className="font-serif-luxury text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-[#f4f2ee] font-light leading-none mt-4 tracking-tight">
+          <div className="font-serif-luxury text-6xl sm:text-8xl md:text-9xl lg:text-[10rem] text-[#f4f2ee] font-normal leading-none mt-4 tracking-[0.03em]">
             Since 2018.
           </div>
 
-          <div className="text-xs uppercase tracking-[0.3em] text-[#716c61] mt-4 font-mono">
+          <div className="text-xs uppercase tracking-[0.35em] text-[#716c61] mt-4 font-mono">
             Antwerp • Mumbai • New York
           </div>
         </div>
 
         {/* Right: The Brand Story, Audience & Core Ethos (7 cols) */}
         <div className="lg:col-span-7 space-y-8">
-          <h3 className="font-serif-luxury text-2xl sm:text-4xl text-[#f4f2ee] font-light leading-snug">
+          <h3 className="font-serif-luxury text-3xl sm:text-5xl md:text-6xl text-[#f4f2ee] font-normal tracking-[0.025em] leading-[1.15]">
             Pioneering the Next Era of Conscious Fine Jewelry and Certified Sourcing.
           </h3>
 

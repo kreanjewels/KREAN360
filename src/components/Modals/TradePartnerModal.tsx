@@ -55,12 +55,12 @@ export const TradePartnerModal: React.FC<TradePartnerModalProps> = ({ isOpen, on
           </div>
         ) : (
           <div>
-            <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] text-[#c9a86a] font-medium mb-1">
+            <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.35em] text-[#c9a86a] font-medium mb-1">
               <Building2 className="w-3.5 h-3.5" />
               <span>B2B Wholesaler & Manufacturer Registration</span>
             </div>
 
-            <h3 className="font-serif-luxury text-2xl sm:text-3xl text-[#f4f2ee] font-light">
+            <h3 className="font-serif-luxury text-3xl sm:text-4xl text-[#f4f2ee] font-normal tracking-[0.025em]">
               Apply for Trade Access & Diamond Memo
             </h3>
 

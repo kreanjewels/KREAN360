@@ -14,11 +14,11 @@ export const TrustBar: React.FC<TrustBarProps> = ({ onOpenCertModal }) => {
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8">
         {/* Left: Section descriptor */}
         <div className="text-center lg:text-left">
-          <div className="text-[10px] uppercase tracking-[0.25em] text-[#c9a86a] font-medium flex items-center justify-center lg:justify-start gap-2">
+          <div className="text-[10px] uppercase tracking-[0.3em] text-[#c9a86a] font-medium flex items-center justify-center lg:justify-start gap-2">
             <ShieldCheck className="w-3.5 h-3.5 text-[#c9a86a]" />
             <span>Independent Verification</span>
           </div>
-          <p className="font-serif-luxury text-xl md:text-2xl text-[#f4f2ee] mt-1 font-light">
+          <p className="font-serif-luxury text-2xl md:text-3xl lg:text-4xl text-[#f4f2ee] mt-1.5 font-normal tracking-[0.03em]">
             Graded by the World’s Leading Gemological Laboratories
           </p>
         </div>
@@ -31,13 +31,13 @@ export const TrustBar: React.FC<TrustBarProps> = ({ onOpenCertModal }) => {
             onClick={onOpenCertModal}
             className="group flex flex-col items-center p-3.5 rounded-sm border border-[#26221a] hover:border-[#c9a86a]/60 bg-black/40 backdrop-blur-sm transition-all duration-300 min-w-[130px] cursor-pointer"
           >
-            <div className="font-serif-luxury text-2xl font-bold tracking-widest text-[#f4f2ee] group-hover:text-[#c9a86a] transition-colors">
+            <div className="font-serif-luxury text-2xl sm:text-3xl font-bold tracking-[0.2em] text-[#f4f2ee] group-hover:text-[#c9a86a] transition-colors">
               IGI
             </div>
-            <span className="text-[9px] uppercase tracking-[0.18em] text-[#8e8a80] mt-0.5">
+            <span className="text-[9px] uppercase tracking-[0.2em] text-[#8e8a80] mt-0.5">
               International Gemological Inst.
             </span>
-            <span className="text-[8px] tracking-[0.2em] text-[#c9a86a]/80 mt-1 flex items-center gap-0.5">
+            <span className="text-[8px] tracking-[0.22em] text-[#c9a86a]/80 mt-1 flex items-center gap-0.5">
               Verify Report <ArrowUpRight className="w-2.5 h-2.5" />
             </span>
           </button>
@@ -47,13 +47,13 @@ export const TrustBar: React.FC<TrustBarProps> = ({ onOpenCertModal }) => {
             onClick={onOpenCertModal}
             className="group flex flex-col items-center p-3.5 rounded-sm border border-[#26221a] hover:border-[#c9a86a]/60 bg-black/40 backdrop-blur-sm transition-all duration-300 min-w-[130px] cursor-pointer"
           >
-            <div className="font-serif-luxury text-2xl font-bold tracking-widest text-[#f4f2ee] group-hover:text-[#c9a86a] transition-colors">
+            <div className="font-serif-luxury text-2xl sm:text-3xl font-bold tracking-[0.2em] text-[#f4f2ee] group-hover:text-[#c9a86a] transition-colors">
               HRD
             </div>
-            <span className="text-[9px] uppercase tracking-[0.18em] text-[#8e8a80] mt-0.5">
+            <span className="text-[9px] uppercase tracking-[0.2em] text-[#8e8a80] mt-0.5">
               HRD Antwerp European Lab
             </span>
-            <span className="text-[8px] tracking-[0.2em] text-[#c9a86a]/80 mt-1 flex items-center gap-0.5">
+            <span className="text-[8px] tracking-[0.22em] text-[#c9a86a]/80 mt-1 flex items-center gap-0.5">
               Master Dossier <ArrowUpRight className="w-2.5 h-2.5" />
             </span>
           </button>

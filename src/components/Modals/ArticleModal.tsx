@@ -35,11 +35,11 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ isOpen, onClose }) =
           </span>
         </div>
 
-        <h2 className="font-serif-luxury text-2xl sm:text-4xl text-[#f4f2ee] font-light leading-tight">
+        <h2 className="font-serif-luxury text-3xl sm:text-5xl text-[#f4f2ee] font-normal tracking-[0.025em] leading-tight">
           {article.title}
         </h2>
 
-        <p className="text-xs uppercase tracking-wider text-[#c9a86a] mt-2 font-medium">
+        <p className="text-xs uppercase tracking-[0.2em] text-[#c9a86a] mt-2 font-medium">
           {article.subtitle}
         </p>
 

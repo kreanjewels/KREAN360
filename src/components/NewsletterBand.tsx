@@ -18,12 +18,12 @@ export const NewsletterBand: React.FC = () => {
     >
       <div className="max-w-5xl mx-auto text-center flex flex-col items-center space-y-8">
         
-        <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] text-[#c9a86a] font-medium">
+        <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.35em] text-[#c9a86a] font-medium">
           <Sparkles className="w-3.5 h-3.5" />
           <span>Private Atelier Dispatch</span>
         </div>
 
-        <h2 className="font-serif-luxury text-3xl sm:text-5xl text-[#f4f2ee] font-light max-w-2xl leading-tight">
+        <h2 className="font-serif-luxury text-4xl sm:text-6xl md:text-7xl text-[#f4f2ee] font-normal tracking-[0.03em] max-w-3xl leading-tight">
           Stay Connected to the Diamond Horizon.
         </h2>
 

@@ -15,11 +15,11 @@ export const MakingProcess: React.FC = () => {
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 pb-8 border-b border-[#1f1c16]">
           <div className="max-w-2xl">
-            <span className="text-[10px] uppercase tracking-[0.3em] text-[#c9a86a] font-medium flex items-center gap-2">
+            <span className="text-[10px] uppercase tracking-[0.35em] text-[#c9a86a] font-medium flex items-center gap-2">
               <Microscope className="w-3.5 h-3.5 text-[#c9a86a]" />
               <span>Grown with Purpose</span>
             </span>
-            <h2 className="font-serif-luxury text-3xl sm:text-5xl md:text-6xl text-[#f4f2ee] font-light mt-3 leading-tight">
+            <h2 className="font-serif-luxury text-4xl sm:text-6xl md:text-7xl text-[#f4f2ee] font-normal tracking-[0.03em] mt-3 leading-tight">
               The Genesis of Fire.
             </h2>
             <p className="text-xs sm:text-sm text-[#9e9a8f] mt-4 leading-relaxed font-light">
@@ -70,13 +70,13 @@ export const MakingProcess: React.FC = () => {
 
           {/* Left: Text & Specs (7 cols) */}
           <div className="lg:col-span-7 space-y-6 relative z-10">
-            <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.25em] text-[#c9a86a] bg-[#1c1811] px-3 py-1 border border-[#332a19]">
+            <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] text-[#c9a86a] bg-[#1c1811] px-3 py-1 border border-[#332a19]">
               <span>Stage {activeStage.numberStr}</span>
               <span className="text-[#6b5832]">•</span>
               <span>{activeStage.subtitle}</span>
             </div>
 
-            <h3 className="font-serif-luxury text-2xl sm:text-4xl text-[#f4f2ee] font-light leading-snug">
+            <h3 className="font-serif-luxury text-3xl sm:text-5xl text-[#f4f2ee] font-normal tracking-[0.025em] leading-snug">
               {activeStage.title}
             </h3>
 
